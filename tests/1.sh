@@ -17,7 +17,7 @@ output=$(echo "$input" | "$binary")
 if [[ "$output" == "$expected_output" ]]; then
   echo -e "\033[37;42mTest Passed!\033[0m"
 else
-  echo -e "\033[31;42mTest Failed.\033[0m"
+  echo -e "\033[37;41mTest Failed.\033[0m"
   echo "Expected: $expected_output"
   echo "Got: $output"
   exit 1
