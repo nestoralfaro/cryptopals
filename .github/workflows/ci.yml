@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-test:
-    name: Run script that builds and tests pushed solution
+    name: Run Build and Test Workflow
     runs-on: self-hosted
 
     steps:
@@ -18,28 +18,26 @@ jobs:
     - name: Build and Test
       run: |
         set -e
-        changed_files=$(git diff --name-only HEAD~1 HEAD)
+        changedFiles=$(git diff --name-only HEAD~1 HEAD | grep '\.cpp$')
 
-        # Find the solution(s) to build
-        solutions_to_run=""
-        for file in $changed_files; do
-          case "$file" in
-            solutions/*)
-              solution=$(echo "$file" | cut -d'/' -f2)
-              solutions_to_run="$solutions_to_run $solution"
-              ;;
-          esac
+        # Find the solution directories
+        solutionsToRun=""
+        for file in $changedFiles; do
+          if [[ $file == solutions/* ]]; then
+            dir=$(dirname "$file")
+            solutionsToRun="$solutionsToRun $dir"
+          fi
         done
 
         # Remove duplicates
-        solutions_to_run=($(echo "${solutions_to_run[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+        solutionsToRun=($(echo "${solutionsToRun[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
 
-        if [ -z "$solutions_to_run" ]; then
-          echo "No solutions bound. Exiting now."
+        if [ -z "$solutionsToRun" ]; then
+          echo "No solutions to build or test. Exiting."
           exit 0
         fi
 
-        echo "Solutions to build and test: $solutions_to_run"
-        for solution in "${solutions_to_run[@]}"; do
+        echo "Solutions to process: ${solutionsToRun[@]}"
+        for solution in "${solutionsToRun[@]}"; do
           ./build-and-test.sh "$solution"
         done

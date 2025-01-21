@@ -5,8 +5,6 @@ The string:
 
 Should produce:
 SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t
-
-testing for git
 */
 
 #include <iostream>
