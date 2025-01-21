@@ -18,6 +18,10 @@ jobs:
     - name: Build and Test
       run: |
         set -e
+        echo "#######################################CURRENTLY AT:#######################################"
+        pwd
+        echo "#######################################CURRENTLY AT^#######################################"
+
 
         # handle empty commit
         if git rev-parse HEAD~1 >/dev/null 2>&1; then
