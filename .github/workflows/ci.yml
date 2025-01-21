@@ -19,25 +19,27 @@ jobs:
       run: |
         set -e
 
-        # handle empty commit case
+        # handle empty commit
         if git rev-parse HEAD~1 >/dev/null 2>&1; then
           changedFiles=$(git diff --name-only HEAD~1 HEAD | grep '\.cpp$')
         else
           echo "No previous commit to compare against. Assuming all .cpp are changed"
-          changedFiles=$(find solutions -type f -name '*.cpp')
+          changedFiles=$(find ../../solutions -type f -name '*.cpp')
         fi
 
         # find the solution directories
         solutionsToRun=""
         for file in $changedFiles; do
-          if [[ $file == solutions/* ]]; then
-            dir=$(dirname "$file")
-            solutionsToRun="$solutionsToRun $dir"
-          fi
+          case "$file" in
+            solutions/*)
+              dir=$(echo "$file" | cut -d'/' -f2)
+              solutionsToRun="$solutionsToRun $dir"
+              ;;
+          esac
         done
 
         # remove duplicates
-        solutionsToRun=($(echo "${solutionsToRun[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+        solutionsToRun=$(echo "${solutionsToRun}" | tr ' ' '\n' | sort -u | tr '\n' ' ')
 
         if [ -z "$solutionsToRun" ]; then
           echo "No solutions to build or test. Exiting."
