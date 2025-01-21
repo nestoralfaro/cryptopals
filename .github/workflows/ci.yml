@@ -18,9 +18,16 @@ jobs:
     - name: Build and Test
       run: |
         set -e
-        changedFiles=$(git diff --name-only HEAD~1 HEAD | grep '\.cpp$')
 
-        # Find the solution directories
+        # handle empty commit
+        if git rev-parse HEAD~1 >/dev/null 2>&1; then
+          changedFiles=$(git diff --name-only HEAD~1 HEAD | grep '\.cpp$')
+        else
+          echo "No previous commit to compare against. Assuming all .cpp are changed"
+          changedFiles=$(find solutions -type f -name '*.cpp')
+        fi
+
+        # find the solution directories
         solutionsToRun=""
         for file in $changedFiles; do
           if [[ $file == solutions/* ]]; then
@@ -29,7 +36,7 @@ jobs:
           fi
         done
 
-        # Remove duplicates
+        # remove duplicates
         solutionsToRun=($(echo "${solutionsToRun[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
 
         if [ -z "$solutionsToRun" ]; then
