@@ -51,7 +51,8 @@ string bytesToBase64(const vector<unsigned char> &bytes) {
     int b3 = (i < bytes.size()) ? bytes[i++] : 0;
 
     /* convert to 4 6-bit base64 characters */
-    base64 += base64Chars[(b1 >> 2) & 0x3F]; /* 1st 6-bit Chunk: shift right and mask with 0x3F (111111) to grab 6-bits */
+    // base64 += base64Chars[(b1 >> 2) & 0x3F]; /* 1st 6-bit Chunk: shift right and mask with 0x3F (111111) to grab 6-bits */
+    base64 += base64Chars[(b1 >> 1) & 0x3F]; /* 1st 6-bit Chunk: shift right and mask with 0x3F (111111) to grab 6-bits */
     base64 += base64Chars[((b1 << 4) | (b2 >> 4)) & 0x3F]; /* 2nd 6-bit Chunk: last 2 bits of b1 + first 4 bits of b2 */
     base64 += (i > bytes.size()) ? '=' : base64Chars[((b2 << 2) | (b3 >> 6)) & 0x3F]; /* 3rd 6-bit Chunk:  */
     base64 += (i > bytes.size()) ? '=' : base64Chars[b3 & 0x3F]; /* 4th 6-bit Chunk: */
