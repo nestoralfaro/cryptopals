@@ -18,6 +18,7 @@ jobs:
     - name: Build and Test
       run: |
         set -e
+        solutions=()
 
         # handle empty commit
         if git rev-parse HEAD~1 >/dev/null 2>&1; then
@@ -28,25 +29,22 @@ jobs:
         fi
 
         # find the solution directories
-        solutionsToRun=""
         for file in $changedFiles; do
-          case "$file" in
-            solutions/*)
-              dir=$(echo "$file" | cut -d'/' -f2)
-              solutionsToRun="$solutionsToRun $dir"
-              ;;
-          esac
+          if [[ $file == solutions/* ]]; then
+            solution=$(echo $file | cut -d'/' -f2)
+            solutions+=("solution")
+          fi
         done
 
         # remove duplicates
-        solutionsToRun=$(echo "${solutionsToRun}" | tr ' ' '\n' | sort -u | tr '\n' ' ')
+        solutionsToRun=$($(echo "${solutionsToRun}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
 
-        if [ -z "$solutionsToRun" ]; then
+        if [[ ${#solutionsToRun[@]} -eq 0]]; then
           echo "No solutions to build or test. Exiting."
           exit 0
         fi
 
         echo "Solutions to process: ${solutionsToRun[@]}"
         for solution in "${solutionsToRun[@]}"; do
-          ./build-and-test.sh "$solution"
+          ./build-and-test.sh $solution
         done
