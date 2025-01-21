@@ -18,17 +18,13 @@ jobs:
     - name: Build and Test
       run: |
         set -e
-        echo "#######################################CURRENTLY AT:#######################################"
-        pwd
-        echo "#######################################CURRENTLY AT^#######################################"
-
 
         # handle empty commit
         if git rev-parse HEAD~1 >/dev/null 2>&1; then
           changedFiles=$(git diff --name-only HEAD~1 HEAD | grep '\.cpp$')
         else
           echo "No previous commit to compare against. Assuming all .cpp are changed"
-          changedFiles=$(find ../../solutions -type f -name '*.cpp')
+          changedFiles=$(find solutions -type f -name '*.cpp')
         fi
 
         # find the solution directories
