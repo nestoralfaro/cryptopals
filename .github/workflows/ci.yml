@@ -37,9 +37,9 @@ jobs:
         done
 
         # remove duplicates
-        solutions=($(printf "%s\n" "${solutions[@]}" | sort -u))
+        solutions=($(echo "${solutions[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
 
-        if [[ ${#solutions[@]} -eq 0]]; then
+        if [[ ${#solutions[@]} -eq 0 ]]; then
           echo "No solutions to build or test. Exiting."
           exit 0
         fi
