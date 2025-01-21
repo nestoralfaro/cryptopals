@@ -31,20 +31,20 @@ jobs:
         # find the solution directories
         for file in $changedFiles; do
           if [[ $file == solutions/* ]]; then
-            solution=$(echo $file | cut -d'/' -f2)
-            solutions+=("solution")
+            solution=$(echo $file | awk -F'/' '{print $2}')
+            solutions+=("$solution")
           fi
         done
 
         # remove duplicates
-        solutionsToRun=$($(echo "${solutionsToRun}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+        solutions=($(printf "%s\n" "${solutions[@]}" | sort -u))
 
-        if [[ ${#solutionsToRun[@]} -eq 0]]; then
+        if [[ ${#solutions[@]} -eq 0]]; then
           echo "No solutions to build or test. Exiting."
           exit 0
         fi
 
-        echo "Solutions to process: ${solutionsToRun[@]}"
-        for solution in "${solutionsToRun[@]}"; do
+        echo "Solutions to process: ${solutions[@]}"
+        for solution in "${solutions[@]}"; do
           ./build-and-test.sh $solution
         done
