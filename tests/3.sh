@@ -25,9 +25,9 @@ plaintext=$(echo "$output" | grep "Decrypted text:" | cut -d':' -f2)
 
 # Validate the key and plaintext
 if [[ "$key" == "$expectedKey1" && "$plaintext" == "$expectedText1" ]]; then
-  echo -e "\033[32;42mTest Passed!\033[0m"
+  echo -e "\033[37;42mTest Passed!\033[0m"
 else
-  echo -e "\033[31;41mTest Failed.\033[0m"
+  echo -e "\033[37;41mTest Failed.\033[0m"
   echo "Expected key: $expectedKey1"
   echo "Got key: $key"
   echo "Expected text: $expectedText1"

@@ -30,7 +30,7 @@ plaintext=$(echo "$output" | sed -n '3p')
 if [[ "$line" == "$expected_line" && "$key" == "$expected_key" && "$plaintext" == "$expected_output" ]]; then
     echo -e "\033[37;42mTest Passed!\033[0m"
 else
-    echo -e "\033[31;41mTest Failed.\033[0m"
+    echo -e "\033[37;41mTest Failed.\033[0m"
     echo "Expected Line: $expected_line, Got: $line"
     echo "Expected Key: $expected_key, Got: $key"
     echo "Expected Decrypted Text: '$expected_output'"
