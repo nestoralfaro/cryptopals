@@ -18,7 +18,10 @@ fi
 mkdir -p build
 
 echo "Build solution: $solution"
-g++ -std=c++17 -o "build/$solution" "$solutionCpp"
+g++ -std=c++17 -o "build/$solution" "$solutionCpp" \
+  -I/opt/homebrew/opt/openssl/include \
+  -L/opt/homebrew/opt/openssl/lib -lcrypto -lssl \
+  # $(pkg-config --cflags --libs openssl) # on linux, not on mac
 chmod +x "build/$solution"
 
 testSh="tests/${solution}.sh"
