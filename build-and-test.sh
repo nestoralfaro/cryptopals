@@ -18,10 +18,21 @@ fi
 mkdir -p build
 
 echo "Build solution: $solution"
+
+# detect OS
+OS_NAME=$(uname -s)
+if [[ "$OS_NAME" == "Darwin" ]]; then
+  OPENSSL_DIR="/opt/homebrew/opt/openssl/"
+elif [[ "$OS_NAME" == "Linux" ]]; then
+  OPENSSL_DIR="/usr"
+else
+  echo "Unsupported OS: $OS_NAME"
+  exit 1
+fi
+
+# compile with OpenSSL
 g++ -std=c++17 -o "build/$solution" "$solutionCpp" \
-  -I/opt/homebrew/opt/openssl/include \
-  -L/opt/homebrew/opt/openssl/lib -lcrypto -lssl \
-  # $(pkg-config --cflags --libs openssl) # on linux, not on mac
+  -I"$OPENSSL_DIR"/include -L"$OPENSSL_DIR"/lib -lcrypto -lssl
 chmod +x "build/$solution"
 
 testSh="tests/${solution}.sh"
