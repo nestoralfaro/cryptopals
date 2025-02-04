@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
   // Read Base64-encoded ciphertext from file
   std::ifstream file(argv[1]);
   if (!file.is_open()) {
-    std::cerr << "Error: Unable to open file 7.txt" << std::endl;
+    std::cerr << "Error: Unable to open file " << argv[1] << std::endl;
     return 1;
   }
 
@@ -94,7 +94,7 @@ int main(int argc, char* argv[]) {
   // Decode Base64
   std::vector<unsigned char> ciphertext = decodeBase64(base64Ciphertext);
 
-  std::cout << "Decoded ciphertext (hex): ";
+  std::cout << "Decoded ciphertext (hex): " << ciphertext.size() << " many characters." << std::endl;
   for (unsigned char c : ciphertext) {
     std::cout << std::hex << (int)c << " ";
   }
