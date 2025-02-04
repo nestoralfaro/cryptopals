@@ -24,6 +24,8 @@ OS_NAME=$(uname -s)
 if [[ "$OS_NAME" == "Darwin" ]]; then
   OPENSSL_DIR="/opt/homebrew/opt/openssl/"
 elif [[ "$OS_NAME" == "Linux" ]]; then
+  echo "Running Linux. Checking OpenSSL Installation Path"
+  pkg-config --cflags --libs openssl
   OPENSSL_DIR="/usr"
 else
   echo "Unsupported OS: $OS_NAME"
@@ -31,6 +33,7 @@ else
 fi
 
 echo "Current OS: $OS_NAME"
+echo "OpenSSL Version: $(openssl version)"
 
 # compile with OpenSSL
 g++ -std=c++17 -o "build/$solution" "$solutionCpp" \
