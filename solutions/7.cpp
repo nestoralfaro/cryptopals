@@ -89,8 +89,16 @@ int main(int argc, char* argv[]) {
   std::string base64Ciphertext((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
   file.close();
 
+  std::cout << "Processed file " << argv[1] << " successfully." << std::endl;
+
   // Decode Base64
   std::vector<unsigned char> ciphertext = decodeBase64(base64Ciphertext);
+
+  std::cout << "Decoded ciphertext (hex): ";
+  for (unsigned char c : ciphertext) {
+    std::cout << std::hex << (int)c << " ";
+  }
+  std::cout << std::endl;
 
   // Decrypt AES-128-ECB
   std::vector<unsigned char> plaintext = aesEcbDecrypt(ciphertext, key);

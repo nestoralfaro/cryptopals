@@ -13,6 +13,8 @@ fi
 
 # Run the binary and capture its output
 output=$("$binary" "$testFile" "$aesKey")
+echo "Captured output:"
+echo $output
 
 # Check the output contains the expected plaintext
 if [[ "$output" == *"$expected_plaintext"* ]]; then
