@@ -8,7 +8,10 @@ if [[ $# -ne 1 ]]; then
 fi
 
 solution="$1"
-echo "#################### SOL $solution ####################"
+echo "#################### BUILD SOLUTION $solution ####################"
+echo "Current OS: $OS_NAME"
+echo "OpenSSL Version: $(openssl version)"
+
 solutionCpp="solutions/${solution}.cpp"
 if [[ ! -f "$solutionCpp" ]]; then
   echo "Solution file $solutionCpp does not exist."
@@ -16,8 +19,6 @@ if [[ ! -f "$solutionCpp" ]]; then
 fi
 
 mkdir -p build
-
-echo "Build solution: $solution"
 
 # detect OS
 OS_NAME=$(uname -s)
@@ -32,8 +33,6 @@ else
   exit 1
 fi
 
-echo "Current OS: $OS_NAME"
-echo "OpenSSL Version: $(openssl version)"
 
 # compile with OpenSSL
 g++ -std=c++17 -o "build/$solution" "$solutionCpp" \
@@ -51,4 +50,4 @@ echo "Running tests for solution: $solution"
 bash "$testSh"
 echo "Removing build below:"
 rm -v "build/$solution"
-echo "#################### SOL $solution ####################"
+echo "#################### BUILD SOLUTION $solution ####################"

@@ -14,6 +14,7 @@ While possible using OpenSSL::Cipher and giving it AES-128-ECB as the cipher; do
 #include <fstream>
 #include <vector>
 #include <string>
+#include <algorithm>
 #include <openssl/evp.h>
 #include <openssl/bio.h>
 #include <openssl/buffer.h>
@@ -76,6 +77,7 @@ std::vector<unsigned char> aesEcbDecrypt(const std::vector<unsigned char> &ciphe
 int main(int argc, char* argv[]) {
   if (argc != 3) {
     std::cout << "Usage: " << argv[0] << " <filename> <key>" << std::endl;
+    return 1;
   }
   const std::string key = argv[2];// AES-128 key (16 bytes)
 
@@ -87,18 +89,22 @@ int main(int argc, char* argv[]) {
   }
 
   std::string base64Ciphertext((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+  // Remove newlines and carriage returns from the Base64 string before decoding
+  base64Ciphertext.erase(std::remove(base64Ciphertext.begin(), base64Ciphertext.end(), '\n'), base64Ciphertext.end());
+  base64Ciphertext.erase(std::remove(base64Ciphertext.begin(), base64Ciphertext.end(), '\r'), base64Ciphertext.end());
+
   file.close();
 
-  std::cout << "Processed file " << argv[1] << " successfully." << std::endl;
+  // std::cout << "Processed file " << argv[1] << " successfully." << std::endl;
 
   // Decode Base64
   std::vector<unsigned char> ciphertext = decodeBase64(base64Ciphertext);
 
-  std::cout << "Decoded ciphertext (hex): " << ciphertext.size() << " many characters." << std::endl;
-  for (unsigned char c : ciphertext) {
-    std::cout << std::hex << (int)c << " ";
-  }
-  std::cout << std::endl;
+  // std::cout << "Decoded ciphertext (hex): " << ciphertext.size() << " many characters." << std::endl;
+  // for (unsigned char c : ciphertext) {
+  //   std::cout << std::hex << (int)c << " ";
+  // }
+  // std::cout << std::endl;
 
   // Decrypt AES-128-ECB
   std::vector<unsigned char> plaintext = aesEcbDecrypt(ciphertext, key);
