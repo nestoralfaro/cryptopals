@@ -1,6 +1,6 @@
 /*
 # S1C8 - Detect AES in ECB mode
-In 8.txt (attached file) are a bunch of hex-encoded ciphertexts.
+In in8.txt are a bunch of hex-encoded ciphertexts.
 One of them has been encrypted with ECB. Detect it using C++.
 
 Remember that the problem with ECB is that it is stateless and deterministic;
@@ -25,6 +25,7 @@ std::vector<std::string> splitIntoBlocks(const std::string &hexString, size_t bl
 // Function to detect repeated blocks in a vector
 bool hasRepeatedBlocks(const std::vector<std::string> &blocks) {
   std::set<std::string> uniqueBlocks(blocks.begin(), blocks.end());
+  // std::cout << "u:" << uniqueBlocks.size() << " b: " << blocks.size() << std::endl;
   return uniqueBlocks.size() < blocks.size();
 }
 
